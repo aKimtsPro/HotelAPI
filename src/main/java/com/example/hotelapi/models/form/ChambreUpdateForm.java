@@ -1,0 +1,28 @@
+package com.example.hotelapi.models.form;
+
+import com.example.hotelapi.models.entity.Chambre;
+import com.example.hotelapi.models.entity.TypeChambre;
+import lombok.Data;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
+@Data
+@Validated
+public class ChambreUpdateForm {
+
+    @Min(1) @Max(5)
+    private int nbrPlaces;
+    private TypeChambre type;
+    @Min(0)
+    private double prix;
+
+    public Chambre toEntity(){
+        Chambre chambre = new Chambre();
+        chambre.setNbrPlaces(nbrPlaces);
+        chambre.setType(type);
+        chambre.setPrix(prix);
+        return chambre;
+    }
+
+}
