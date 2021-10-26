@@ -8,6 +8,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class Client extends User{
     @LazyCollection(LazyCollectionOption.FALSE) // multiple bag fix
     private List<String> moyenPayement;
 
-    @OneToMany(mappedBy = "reservePar")
-    private Set<Reservation> reservations;
+    @OneToMany(mappedBy = "reservePar", fetch = FetchType.EAGER)
+    private Set<Reservation> reservations = new HashSet<>();
 
 }

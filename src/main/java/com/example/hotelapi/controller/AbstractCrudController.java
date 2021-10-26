@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class AbstractCrudController<TDTO, TFORM, TUFORM, TID> {
 
-    private final BaseService<TDTO, TFORM, TUFORM, TID> service;
+    protected final BaseService<TDTO, TFORM, TUFORM, TID> service;
 
     protected AbstractCrudController(BaseService<TDTO, TFORM, TUFORM, TID> service) {
         this.service = service;

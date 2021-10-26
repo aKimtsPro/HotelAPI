@@ -5,8 +5,17 @@ import com.example.hotelapi.models.entity.Chambre;
 import com.example.hotelapi.models.form.ChambreForm;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 public class ChambreMapper implements BaseMapper<ChambreDTO, ChambreForm, Chambre>{
+
+    private final ReservationMapper reservationMapper;
+
+    public ChambreMapper(ReservationMapper reservationMapper) {
+        this.reservationMapper = reservationMapper;
+    }
+
     @Override
     public ChambreDTO toDto( Chambre entity ) {
         if( entity == null )
@@ -17,12 +26,17 @@ public class ChambreMapper implements BaseMapper<ChambreDTO, ChambreForm, Chambr
                 .nbrPlaces( entity.getNbrPlaces() )
                 .prix( entity.getPrix() )
                 .type( entity.getType() )
+                .reservations(
+                        entity.getReservations()
+                                .stream()
+                                .map( reservationMapper::toDto )
+                                .collect( Collectors.toList() )
+                )
                 .build();
     }
 
     @Override
     public Chambre formToEntity(ChambreForm form) {
-
         if( form == null )
             return null;
 
@@ -32,6 +46,5 @@ public class ChambreMapper implements BaseMapper<ChambreDTO, ChambreForm, Chambr
         entity.setType(form.getType());
         entity.setNbrPlaces(form.getNbrPlaces());
         return entity;
-
     }
 }

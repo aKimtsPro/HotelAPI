@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,9 +27,9 @@ public class Chambre {
     @Column(nullable = false, columnDefinition = "DECIMAL(10,2)")
     private double prix;
 
-    @OneToMany(mappedBy = "reserve")
-    private Set<Reservation> reservations;
+    @OneToMany(mappedBy = "reserve", fetch = FetchType.EAGER)
+    private Set<Reservation> reservations = new HashSet<>();
 
     @ManyToMany
-    private Set<Consommation> consommations;
+    private Set<Consommation> consommations = new HashSet<>();
 }

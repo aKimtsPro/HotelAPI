@@ -13,10 +13,13 @@ import java.util.List;
 @Builder
 public class ClientDTO {
 
+    private long id;
     private String username;
     private String nom;
     private String prenom;
     private String tel;
     private List<String> moyenPayement;
+
+    private List<ReservationDTO> reservations;
 
 }

@@ -3,6 +3,7 @@ package com.example.hotelapi.service;
 import com.example.hotelapi.exceptions.models.ElementNotFoundException;
 import com.example.hotelapi.mapper.BaseMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;

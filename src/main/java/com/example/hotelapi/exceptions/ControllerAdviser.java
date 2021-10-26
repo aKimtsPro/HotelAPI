@@ -11,7 +11,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 @ControllerAdvice
@@ -24,35 +23,12 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorDTO> handle(Throwable ex){ // TODO : Quid de la requete?
 
         ResponseEntity<ErrorDTO> responseEntity;
-        if( (responseEntity = handleAdviserHandler(ex)) != null )
+        if(
+                (responseEntity = handleAdviserHandler(ex)) != null
+                || (responseEntity = handleBadRequestHandler(ex)) != null
+                || (responseEntity = handleHandlings(ex)) != null
+        ) {
             return responseEntity;
-
-        if( ex.getMessage() != null ){
-
-            try{ // gerer BadRequestHandler
-                BadRequestHandler badRequestHandler = this.getClass().getAnnotation(BadRequestHandler.class);
-                if( badRequestHandler != null ){
-                    return Arrays.stream(badRequestHandler.value())
-                            .filter((exClazz) -> exClazz.isAssignableFrom(ex.getClass()))
-                            .findFirst()
-                            .map( (exClazz) ->
-                                    ResponseEntity
-                                            .status(HttpStatus.BAD_REQUEST)
-                                            .body(ErrorDTO.of(ex) ))
-                            .orElseThrow();
-                }
-            }catch (NoSuchElementException ignored){}
-
-            try { // gerer handlings
-                return handlings.stream()
-                        .filter(handling -> handling.getExceptionClazz().isAssignableFrom(ex.getClass()) )
-                        .findFirst()
-                        .map((h) ->
-                                ResponseEntity
-                                        .status( h.getStatus() )
-                                        .body( ErrorDTO.of(ex) ))
-                        .orElseThrow();
-            }catch (NoSuchElementException ignored){}
         }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) // 500
@@ -71,5 +47,30 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
                     .body(ErrorDTO.of(ex));
 
         return null;
+    }
+    private ResponseEntity<ErrorDTO> handleBadRequestHandler(Throwable ex){
+        BadRequestHandler badRequestHandler = this.getClass().getAnnotation(BadRequestHandler.class);
+        if( badRequestHandler != null ){
+            return Arrays.stream(badRequestHandler.value())
+                    .filter((exClazz) -> exClazz.isAssignableFrom(ex.getClass()))
+                    .findFirst()
+                    .map( (exClazz) ->
+                            ResponseEntity
+                                    .status(HttpStatus.BAD_REQUEST)
+                                    .body(ErrorDTO.of(ex) ))
+                    .orElse(null);
+        }
+
+        return null;
+    }
+    private ResponseEntity<ErrorDTO> handleHandlings(Throwable ex){
+        return handlings.stream()
+                .filter(handling -> handling.getExceptionClazz().isAssignableFrom(ex.getClass()) )
+                .findFirst()
+                .map((h) ->
+                        ResponseEntity
+                                .status( h.getStatus() )
+                                .body( ErrorDTO.of(ex) ))
+                .orElse(null);
     }
 }
