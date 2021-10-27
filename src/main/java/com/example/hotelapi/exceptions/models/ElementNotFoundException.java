@@ -7,14 +7,16 @@ import org.springframework.http.HttpStatus;
 @AdviserHandled(HttpStatus.NOT_FOUND)
 public class ElementNotFoundException extends RuntimeException{
 
-    @SkippedProperty
-    private final String ok = "ok";
+
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String ignored = "ok";
 
     public ElementNotFoundException() {
         super("L'element recherché n'existe pas");
     }
 
-    public String getOk() {
-        return ok;
+    @SkippedProperty
+    public String getIgnored() {
+        return ignored;
     }
 }

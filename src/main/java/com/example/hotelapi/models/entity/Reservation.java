@@ -20,8 +20,9 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(columnDefinition = "DATE default CURRENT_DATE", unique = true, insertable = false)
+    @Column(columnDefinition = "DATE default CURRENT_DATE", nullable = false, insertable = false)
     private LocalDate checkin;
+    @Column(nullable = false)
     private LocalDate checkout;
     @Column(nullable = false)
     private boolean breakfastIncluded;

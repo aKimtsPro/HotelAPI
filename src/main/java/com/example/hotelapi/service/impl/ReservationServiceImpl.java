@@ -57,12 +57,13 @@ public class ReservationServiceImpl extends AbstractBaseService<ReservationDTO, 
     @Override
     public ReservationDTO askForReserv(String username, ReservationRequestForm form){
 
-        if( form.getCheckin().isBefore( form.getCheckout() ))
+        if( !form.getCheckin().isBefore( form.getCheckout() ))
             throw new InvalidDatesException(form.getCheckin(), form.getCheckout());
 
         // Récupération d'une chambre disponible
         List<Chambre> chambres = chambreRepository.getChambreByType( form.getChambre() );
         Chambre toReserve = chambres.stream()
+                .filter( c -> c.getNbrPlaces() == form.getNbrPers() )
                 .filter( c -> checkAvailable(c, form.checkin, form.checkout))
                 .findFirst()
                 .orElseThrow( () -> new NoRoomAvailableException(form) );

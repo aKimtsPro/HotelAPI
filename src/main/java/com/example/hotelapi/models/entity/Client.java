@@ -17,6 +17,7 @@ import java.util.Set;
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@PrimaryKeyJoinColumn(name = "clientId")
 public class Client extends User{
 
     @Column(nullable = false)

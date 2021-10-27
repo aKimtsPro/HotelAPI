@@ -24,10 +24,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.headers().frameOptions().disable();
 
+        // h2 console
+        http.headers()
+                .frameOptions()
+                .disable();
+
+//        http.httpBasic();
         http.addFilterBefore(new JwtAuthorizationFilter(provider), UsernamePasswordAuthenticationFilter.class);
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        // pas de cookies
+        http.sessionManagement().sessionCreationPolicy( SessionCreationPolicy.STATELESS );
 
         http.authorizeRequests()
                 .antMatchers("/client/test").authenticated()

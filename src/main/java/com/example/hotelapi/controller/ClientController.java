@@ -1,6 +1,7 @@
 package com.example.hotelapi.controller;
 
 import com.example.hotelapi.models.dto.ClientDTO;
+import com.example.hotelapi.models.dto.RedirectionDTO;
 import com.example.hotelapi.models.form.ClientForm;
 import com.example.hotelapi.service.BaseService;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,10 @@ public class ClientController extends AbstractCrudController<ClientDTO, ClientFo
     }
 
     @GetMapping("/test")
-    public ResponseEntity<?> test(Authentication auth){
-        return new ResponseEntity<Object>(HttpStatus.OK);
+    public ResponseEntity<RedirectionDTO> test(Authentication auth){
+        return ResponseEntity
+                .status(HttpStatus.MOVED_PERMANENTLY)
+                .body( new RedirectionDTO("http://localhost:8080/login") );
     }
 
 }
