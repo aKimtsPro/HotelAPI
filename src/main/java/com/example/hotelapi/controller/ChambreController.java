@@ -13,4 +13,7 @@ public class ChambreController extends AbstractCrudController<ChambreDTO, Chambr
     protected ChambreController(BaseService<ChambreDTO, ChambreForm, ChambreUpdateForm, Integer> service) {
         super(service);
     }
+
+    // get all: GET /room
+    // insert: POST /room (ChambreForm valide en body)
 }

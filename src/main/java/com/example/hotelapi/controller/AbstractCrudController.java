@@ -21,7 +21,7 @@ public abstract class AbstractCrudController<TDTO, TFORM, TUFORM, TID> {
     }
 
     @GetMapping
-    public ResponseEntity<List<TDTO>> getOne(){
+    public ResponseEntity<List<TDTO>> getAll(){
         return ResponseEntity.ok( service.getAll() );
     }
 
