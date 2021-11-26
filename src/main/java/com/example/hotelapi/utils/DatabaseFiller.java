@@ -45,7 +45,7 @@ public class DatabaseFiller implements InitializingBean {
         Client c = new Client();
         c.setUsername("user");
         c.setPassword( encoder.encode("pass")) ;
-        c.setRoles(List.of( "USER" ));
+        c.setRoles(List.of( "CLIENT" ));
         c.setMoyenPayement(List.of("VISA"));
         c.setTel("0000000");
         c.setPrenom("luc");

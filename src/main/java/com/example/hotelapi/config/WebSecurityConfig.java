@@ -4,6 +4,7 @@ import com.example.hotelapi.security.JwtAuthorizationFilter;
 import com.example.hotelapi.security.JwtProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -44,6 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy( SessionCreationPolicy.STATELESS );
 
         http.authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "*").permitAll()
+                .antMatchers(HttpMethod.POST,"/reserv/request").hasAuthority("CLIENT")
                 .antMatchers("/client/test").authenticated()
                 .anyRequest().permitAll();
     }
@@ -60,7 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:4200");
             }
         };
 

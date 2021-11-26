@@ -1,5 +1,6 @@
 package com.example.hotelapi.service.impl;
 
+import com.example.hotelapi.models.dto.LoginSuccessDTO;
 import com.example.hotelapi.models.entity.User;
 import com.example.hotelapi.models.form.LoginForm;
 import com.example.hotelapi.repository.UserRepository;
@@ -25,7 +26,7 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public String login(LoginForm form) {
+    public LoginSuccessDTO login(LoginForm form) {
         User user = repository.findByUsername(form.getUsername())
                 .orElseThrow( () -> new UsernameNotFoundException("l'utilisateur n'existe pas"));
         // creer l'authentication
@@ -34,7 +35,10 @@ public class SessionServiceImpl implements SessionService {
         manager.authenticate( authentication );
 
         // -> ok : creer token et le renvoyer
-        return provider.createToken(user.getUsername(), user.getRoles());
+        return LoginSuccessDTO.builder()
+                .jwt( provider.createToken(user.getUsername(), user.getRoles()) )
+                .username( user.getUsername() )
+                .build()  ;
     }
 
 }

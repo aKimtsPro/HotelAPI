@@ -1,5 +1,6 @@
 package com.example.hotelapi.controller;
 
+import com.example.hotelapi.models.dto.LoginSuccessDTO;
 import com.example.hotelapi.models.form.LoginForm;
 import com.example.hotelapi.service.spec.SessionService;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class SessionController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginForm form){
+    public ResponseEntity<LoginSuccessDTO> login(@Valid @RequestBody LoginForm form){
         return ResponseEntity.ok( service.login(form) );
     }
 
