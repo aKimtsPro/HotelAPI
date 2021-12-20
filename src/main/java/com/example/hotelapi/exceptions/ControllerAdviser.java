@@ -3,6 +3,7 @@ package com.example.hotelapi.exceptions;
 import com.example.hotelapi.exceptions.annotation.AdviserHandled;
 import com.example.hotelapi.exceptions.annotation.BadRequestHandler;
 import com.example.hotelapi.exceptions.models.ErrorDTO;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,7 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<ErrorDTO> handleAdviserHandler(Throwable ex){
 
-        AdviserHandled adviserHandled = ex.getClass().getAnnotation(AdviserHandled.class);
+        AdviserHandled adviserHandled = AnnotationUtils.findAnnotation(ex.getClass(), AdviserHandled.class);
         if( adviserHandled != null )
             return ResponseEntity
                     .status(adviserHandled.value())
@@ -64,7 +65,7 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
     }
     private ResponseEntity<ErrorDTO> handleBadRequestHandler(Throwable ex){
 
-        BadRequestHandler badRequestHandler = this.getClass().getAnnotation(BadRequestHandler.class);
+        BadRequestHandler badRequestHandler = AnnotationUtils.findAnnotation(this.getClass(), BadRequestHandler.class);
         if( badRequestHandler != null ){
             return Arrays.stream(badRequestHandler.value())
                     .filter((exClazz) -> exClazz.isAssignableFrom(ex.getClass()))
