@@ -4,12 +4,16 @@ import com.example.hotelapi.models.dto.ClientDTO;
 import com.example.hotelapi.models.dto.RedirectionDTO;
 import com.example.hotelapi.models.form.ClientForm;
 import com.example.hotelapi.service.BaseService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/client")

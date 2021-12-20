@@ -3,10 +3,13 @@ package com.example.hotelapi.exceptions;
 import com.example.hotelapi.exceptions.annotation.AdviserHandled;
 import com.example.hotelapi.exceptions.annotation.BadRequestHandler;
 import com.example.hotelapi.exceptions.models.ErrorDTO;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Arrays;
@@ -18,6 +21,15 @@ import java.util.Set;
 public class ControllerAdviser extends ResponseEntityExceptionHandler {
 
     private final Set<BasicControllerExceptionHandler> handlings = new HashSet<>();
+
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return super.handleMethodArgumentNotValid(ex, headers, status, request);
+    }
+
+
+
 
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ErrorDTO> handle(Throwable ex){ // TODO : Quid de la requete?
@@ -40,6 +52,7 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<ErrorDTO> handleAdviserHandler(Throwable ex){
+
         AdviserHandled adviserHandled = ex.getClass().getAnnotation(AdviserHandled.class);
         if( adviserHandled != null )
             return ResponseEntity
@@ -47,8 +60,10 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
                     .body(ErrorDTO.of(ex));
 
         return null;
+
     }
     private ResponseEntity<ErrorDTO> handleBadRequestHandler(Throwable ex){
+
         BadRequestHandler badRequestHandler = this.getClass().getAnnotation(BadRequestHandler.class);
         if( badRequestHandler != null ){
             return Arrays.stream(badRequestHandler.value())
@@ -64,6 +79,7 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
         return null;
     }
     private ResponseEntity<ErrorDTO> handleHandlings(Throwable ex){
+
         return handlings.stream()
                 .filter(handling -> handling.getExceptionClazz().isAssignableFrom(ex.getClass()) )
                 .findFirst()
@@ -72,5 +88,6 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
                                 .status( h.getStatus() )
                                 .body( ErrorDTO.of(ex) ))
                 .orElse(null);
+
     }
 }
