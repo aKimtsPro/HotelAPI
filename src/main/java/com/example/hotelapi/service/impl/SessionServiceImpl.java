@@ -34,6 +34,8 @@ public class SessionServiceImpl implements SessionService {
         // tester l'authentication
         manager.authenticate( authentication );
 
+
+
         // -> ok : creer token et le renvoyer
         return LoginSuccessDTO.builder()
                 .jwt( provider.createToken(user.getUsername(), user.getRoles()) )

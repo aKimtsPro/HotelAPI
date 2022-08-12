@@ -66,9 +66,7 @@ public class JwtProvider {
             return false;
         }
 
-
     }
-
 
     public Authentication getAuth( String token ){
         String username = JWT.decode( token ).getSubject();

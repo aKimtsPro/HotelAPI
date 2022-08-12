@@ -23,14 +23,10 @@ public class ControllerAdviser extends ResponseEntityExceptionHandler {
 
     private final Set<BasicControllerExceptionHandler> handlings = new HashSet<>();
 
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return super.handleMethodArgumentNotValid(ex, headers, status, request);
     }
-
-
-
 
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ErrorDTO> handle(Throwable ex){ // TODO : Quid de la requete?

@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy( SessionCreationPolicy.STATELESS );
 
         http.authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "*").permitAll()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers(HttpMethod.POST,"/reserv/request").hasAuthority("CLIENT")
                 .antMatchers("/client/test").authenticated()
                 .anyRequest().permitAll();
@@ -56,5 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
+
+
 
 }
